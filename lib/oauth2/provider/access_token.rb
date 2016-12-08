@@ -46,7 +46,7 @@
       private
 
         def authorize!(access_token, error)
-          return unless @authorization = Model.find_access_token([:access_token, access_token])
+          return unless @authorization = Model::Authorization.find_by_token_tuple([:access_token, access_token])
           @authorization.update_attribute(:access_token, nil) if error
         end
 

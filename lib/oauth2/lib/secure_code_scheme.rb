@@ -70,8 +70,8 @@ module OAuth2
       def self.aes_cipher(direction)
         cipher = OpenSSL::Cipher::AES.new(256, :CBC)
         cipher.send(direction)
-        cipher.key  = ENV[CIPHER_KEY] || cipher.random_key
-        cipher.iv   = ENV[CIPHER_IV]  || cipher.random_iv
+        cipher.key  = ENV[CIPHER_KEY] || raise("Missing '#{CIPHER_KEY}' environment variable.")
+        cipher.iv   = ENV[CIPHER_IV]  || raise("Missing '#{CIPHER_IV}' environment variable.")
         cipher
       end
 

@@ -106,13 +106,23 @@ module OAuth2
         end
       end
 
-      def self.find_by_jwt(jwt)
-        # TODO: move check of expiry to a better place
-        begin
-          Time.now.utc.to_i < jwt[:exp] ? User.find(jwt[:sub]) : nil
-        rescue ActiveRecord::ActiveRecordError => e
-          nil
+      # This will only return an authorisation for JWT and non-JWT tokens
+      def self.find_by_token_tuple(token_tuple)
+        return nil if token_tuple.nil?
+
+        if token_tuple[0] == :jwt
+          find_by_jwt(token_tuple[1])
+        else
+          find_by_access_token_hash(Lib::SecureCodeScheme.hashify(token_tuple[1]))
         end
+      end
+
+      def self.find_by_jwt(jwt)
+        auth = find_by(id_token: jwt)
+        return nil if auth && auth.expired?
+        auth
+      rescue ActiveRecord::ActiveRecordError => e
+        nil
       end
 
       def exchange!
