@@ -114,6 +114,8 @@ the gem's migrations that have not yet been applied to your database.
 
 To rollback migrations, use <tt>OAuth2::Model::Schema.rollback</tt>.
 
+To migrate to a specific point, use <tt>OAuth2::Model::Schema.migrate(target_version: 20120828112156)</tt>, replacing the target version number with the timestamp of the last migration you wish to run.
+
 
 === Model Mixins
 
