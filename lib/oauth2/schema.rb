@@ -1,9 +1,9 @@
 module OAuth2
 
   class Schema
-    def self.migrate
+    def self.migrate(target_version: nil)
       ActiveRecord::Base.logger ||= Logger.new(StringIO.new)
-      ActiveRecord::Migrator.up(migrations_path)
+      ActiveRecord::Migrator.up(migrations_path, target_version)
     end
     class << self
       alias :up :migrate
